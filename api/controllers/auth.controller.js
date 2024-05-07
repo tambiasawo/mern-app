@@ -8,7 +8,9 @@ export const SignupController = async (req, res, next) => {
   const user = new User({ username, email, password: hashedPassword });
   try {
     await user.save();
-    res.status(201).json({ message: "New User created " + user });
+    res
+      .status(201)
+      .json({ message: "New User created " + user, success: true });
   } catch (err) {
     next(err);
   }
