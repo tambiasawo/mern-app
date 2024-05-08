@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignIn() {
   const [formData, setFormData] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     if (isError) setIsError(false);
@@ -18,16 +19,19 @@ function SignIn() {
     try {
       setIsLoading(true);
       setIsError(false);
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await response.json();
       setIsLoading(false);
-      if (!data.success) {
+
+      if (!data.email) {
         setIsError(true);
+        return;
       }
+      navigate("/home");
     } catch (e) {
       setIsLoading(false);
       setIsError(true);
@@ -35,18 +39,11 @@ function SignIn() {
   };
   return (
     <div className="mx-auto p-3 mt-10">
-      <h1 className="text-center font-semibold text-2xl py-3"> Sign Up</h1>
+      <h1 className="text-center font-semibold text-2xl py-3"> Sign In</h1>
       <form
         className="flex justify-center items-center flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        <input
-          type="text"
-          id="username"
-          placeholder="Username"
-          className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[25%] focus:outline-dashed"
-          onChange={handleChange}
-        />
         <input
           type="email"
           id="email"
@@ -65,16 +62,16 @@ function SignIn() {
           className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[25%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
           disabled={isLoading}
         >
-          {isLoading ? "Loading..." : "Sign Up"}
+          {isLoading ? "Loading..." : "Sign In"}
         </button>
         <div>
           <p>
-            Have an account?{" "}
+            Don't have an account?{" "}
             <Link
-              to="/sign-in"
+              to="/sign-up"
               className="underline hover:text-blue-500 cursor-pointer"
             >
-              Sign in
+              Sign up
             </Link>
           </p>
         </div>
