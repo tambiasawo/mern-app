@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuthBtn from "../components/OAuthBtn";
 
 function SignUp() {
   const [formData, setFormData] = React.useState({});
@@ -70,6 +71,8 @@ function SignUp() {
         >
           {isLoading ? "Loading..." : "Sign Up"}
         </button>
+        <OAuthBtn />
+
         <div>
           <p>
             Have an account?{" "}

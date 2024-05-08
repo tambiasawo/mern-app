@@ -42,3 +42,47 @@ export const SignInController = async (req, res, next) => {
     next(err);
   }
 };
+
+export const GoogleSignUpController = async (req, res, next) => {
+  const { name, email, photo } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      const { password, ...rest } = existingUser._doc;
+      const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET);
+      const expiryDate = new Date(Date.now() + 3600000);
+      return res
+        .cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+        .status(200)
+        .json(rest);
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      const user = new User({
+        username: name
+          .split(" ")
+          .join("")
+          .toLowerCase()
+          .padEnd(20, Math.floor(Math.random() * 10000)),
+        email,
+        password: hashedPassword,
+        profileImage: photo,
+      });
+      const { password, ...userRest } = user._doc;
+
+      await user.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const expiryDate = new Date(Date.now() + 3600000);
+      return res
+        .cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+        .status(200)
+        .json(userRest);
+    }
+  } catch (e) {}
+};
+
+export const GoogleSignInController = async (req, res, next) => {};

@@ -1,4 +1,5 @@
 import React from "react";
+import OAuthBtn from "../components/OAuthBtn";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -65,11 +66,12 @@ function SignIn() {
           onChange={handleChange}
         />
         <button
-          className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[25%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
+          className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[35%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
           disabled={user.loading}
         >
           {user.loading ? "Loading..." : "Sign In"}
         </button>
+
         <div>
           <p>
             Don't have an account?{" "}
