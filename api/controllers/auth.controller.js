@@ -24,7 +24,7 @@ export const SignInController = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return next(errorHandler(404, "Credentials Wrong. Pls Try Again"));
+      return next(errorHandler);
     }
     const checkValidity = enteredPassword.localeCompare(user.password);
 

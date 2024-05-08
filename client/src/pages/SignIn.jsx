@@ -1,14 +1,20 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../redux/user/userSlice";
 
 function SignIn() {
   const [formData, setFormData] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isError, setIsError] = React.useState(false);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const handleChange = (e) => {
-    if (isError) setIsError(false);
     setFormData((prev) => {
       return { ...prev, [e.target.id]: e.target.value };
     });
@@ -17,24 +23,24 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setIsLoading(true);
-      setIsError(false);
+      dispatch(signInStart());
       const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      setIsLoading(false);
 
       if (!data.email) {
-        setIsError(true);
+        console.log(data);
+        dispatch(signInFailure(data.message));
         return;
       }
-      navigate("/home");
-    } catch (e) {
-      setIsLoading(false);
-      setIsError(true);
+
+      dispatch(signInSuccess(data));
+      navigate("/");
+    } catch (error) {
+      dispatch(signInFailure(error));
     }
   };
   return (
@@ -60,9 +66,9 @@ function SignIn() {
         />
         <button
           className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[25%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
-          disabled={isLoading}
+          disabled={user.loading}
         >
-          {isLoading ? "Loading..." : "Sign In"}
+          {user.loading ? "Loading..." : "Sign In"}
         </button>
         <div>
           <p>
@@ -75,7 +81,7 @@ function SignIn() {
             </Link>
           </p>
         </div>
-        {isError && (
+        {user.error && (
           <p className="text-red-500">
             Something went wrong. Please try again.
           </p>
