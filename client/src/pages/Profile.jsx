@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function profile() {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <div>profile</div>;
 }
 
-export default profile
+export default profile;
