@@ -35,7 +35,7 @@ export const SignInController = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     const expiryDate = new Date(Date.now() + 3600000);
     return res
-      .cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
       .json(rest);
   } catch (err) {
@@ -53,7 +53,7 @@ export const GoogleSignUpController = async (req, res, next) => {
       const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET);
       const expiryDate = new Date(Date.now() + 3600000);
       return res
-        .cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
         .json(rest);
     } else {
@@ -78,7 +78,7 @@ export const GoogleSignUpController = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const expiryDate = new Date(Date.now() + 3600000);
       return res
-        .cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
         .status(200)
         .json(userRest);
     }

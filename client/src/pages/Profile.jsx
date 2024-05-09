@@ -23,7 +23,6 @@ function Profile() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const [imageError, setImageError] = React.useState(false);
-  //const [formData, setFormData] = React.useState({});
 
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -34,8 +33,8 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart());
-      const response = await fetch("/api/auth/signin", {
+      //dispatch(signInStart());
+      const response = await fetch("/api/user/update/:id", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -44,14 +43,14 @@ function Profile() {
 
       if (!data.email) {
         console.log(data);
-        dispatch(signInFailure(data.message));
+        //dispatch(signInFailure(data.message));
         return;
       }
 
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      dispatch(signInFailure(error));
+      //dispatch(signInFailure(error));
     }
   };
 
@@ -66,7 +65,7 @@ function Profile() {
 
   const handleImageUpload = async () => {
     const storage = getStorage(app);
-    const fileName = image.name + new Date().getTime();
+    const fileName = image?.name + new Date().getTime();
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, image);
 
