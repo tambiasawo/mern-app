@@ -55,14 +55,14 @@ function SignIn() {
           type="email"
           id="email"
           placeholder="Email Address"
-          className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[25%]"
+          className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
           onChange={handleChange}
         />
         <input
           type="password"
           id="password"
           placeholder="Password"
-          className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[25%]"
+          className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
           onChange={handleChange}
         />
         <button
@@ -71,7 +71,7 @@ function SignIn() {
         >
           {user.loading ? "Loading..." : "Sign In"}
         </button>
-
+        <OAuthBtn />
         <div>
           <p>
             Don't have an account?{" "}
