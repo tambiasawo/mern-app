@@ -6,6 +6,9 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserSuccess,
+  deleteUserStart,
+  deleteUserFailure,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 import {
   getDownloadURL,
@@ -90,6 +93,26 @@ function Profile() {
     );
   };
 
+  const handleDelete = async () => {
+    dispatch(deleteUserStart());
+    try {
+      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      console.log(data);
+      navigate("/");
+      if (!data.success) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+
+      dispatch(deleteUserSuccess(data));
+    } catch (e) {
+      dispatch(deleteUserFailure(e));
+    }
+  };
+
   return (
     <div className="mx-auto p-3 mt-10">
       <h1 className="text-center font-semibold text-3xl py-3"> Profile</h1>
@@ -155,8 +178,8 @@ function Profile() {
         <div className="flex justify-between w-full sm:w-[75%] lg:w-[35%]">
           <p>
             <Link
-              to="/sign-up"
               className="underline cursor-pointer text-red-500 hover:opacity-85"
+              onClick={handleDelete}
             >
               Delete Account
             </Link>
