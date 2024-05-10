@@ -43,7 +43,7 @@ export const SignInController = async (req, res, next) => {
   }
 };
 
-export const GoogleSignUpController = async (req, res, next) => {
+export const GoogleAuthController = async (req, res, next) => {
   const { name, email, photo } = req.body;
 
   try {
@@ -85,7 +85,7 @@ export const GoogleSignUpController = async (req, res, next) => {
   } catch (e) {}
 };
 
-export const SignOutController = async (req, res, ) => {
+export const SignOutController = async (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return;
   res.clearCookie("access_token").status(200).json("User signed out");
