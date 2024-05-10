@@ -9,12 +9,19 @@ export const SignUpController = async (req, res, next) => {
 
   const user = new User({ username, email, password: hashedPassword });
   try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(404).json({
+        message: "Sorry, we were not able to sign you up",
+        success: false,
+      });
+    }
     await user.save();
     res
       .status(201)
       .json({ message: "New User created " + user, success: true });
   } catch (err) {
-    next(err);
+    next(errorHandler);
   }
 };
 
