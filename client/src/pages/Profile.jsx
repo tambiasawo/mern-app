@@ -9,6 +9,7 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
+  signOut,
 } from "../redux/user/userSlice";
 import {
   getDownloadURL,
@@ -37,6 +38,15 @@ function Profile() {
   const handleImageChange = (e) => {
     const image = e.target.files[0];
     setImage(image);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/signout");
+      dispatch(signOut());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -186,7 +196,7 @@ function Profile() {
           </p>
           <p>
             <Link
-              to="/sign-up"
+              onClick={handleSignOut}
               className="underline hover:opacity-85 cursor-pointer text-red-500"
             >
               Sign Out
