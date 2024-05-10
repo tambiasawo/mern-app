@@ -3,10 +3,11 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 function OAuthBtn() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -25,6 +26,7 @@ function OAuthBtn() {
       const data = await response.json();
       if (data.email) {
         dispatch(signInSuccess(data));
+        navigate("/");
       }
     } catch (e) {
       console.log(e);
@@ -37,7 +39,7 @@ function OAuthBtn() {
       onClick={handleClick}
       className="uppercase bg-red-500 w-full sm:w-[75%] lg:w-[35%] text-white hover:opacity-95 p-3 rounded-lg"
     >
-      Sign Up With google
+      Continue With google
     </button>
   );
 }

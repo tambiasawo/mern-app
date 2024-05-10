@@ -33,7 +33,6 @@ function SignIn() {
       const data = await response.json();
 
       if (!data.email) {
-        console.log(data);
         dispatch(signInFailure(data.message));
         return;
       }

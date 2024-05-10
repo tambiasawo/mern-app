@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Header() {
-  const reduxState = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <div className="bg-slate-200">
@@ -18,12 +18,12 @@ function Header() {
           <Link to="/about">
             <li>About</li>
           </Link>
-          {reduxState.currentUser ? (
+          {currentUser ? (
             <Link to="/profile">
               <img
-                src="https://lh3.googleusercontent.com/a/ACg8ocLEsba99WiEAljabG89GqjvcXTLRKdyoZ8Y9XED2fOkHMEmiSwR=s96-c"
+                src={currentUser.profileImage}
                 alt="profile"
-                referrerpolicy="no-referrer"
+                referrerPolicy="no-referrer"
                 className="w-7 h-7 rounded-full object-cover"
               />
             </Link>

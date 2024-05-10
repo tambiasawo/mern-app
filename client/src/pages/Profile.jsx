@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { app } from "../../firebase";
 import {
-  signInStart,
-  signInFailure,
-  signInSuccess,
+  updateUserStart,
+  updateUserFailure,
+  updateUserSuccess,
 } from "../redux/user/userSlice";
 import {
   getDownloadURL,
@@ -16,12 +16,13 @@ import {
 
 function Profile() {
   const [formData, setFormData] = React.useState({});
+  const [updateSuccess, setUpdateSuccess] = React.useState(false);
   const fileRef = React.useRef(null);
   const [image, setImage] = React.useState(null);
   const [imageUploadProgress, setImageUploadProgress] = React.useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const [imageError, setImageError] = React.useState(false);
 
   const handleChange = (e) => {
@@ -30,11 +31,20 @@ function Profile() {
     });
   };
 
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    setImage(image);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (Object.keys(formData).length === 0) {
+      return; //seta state
+    }
     try {
-      //dispatch(signInStart());
-      const response = await fetch("/api/user/update/:id", {
+      dispatch(updateUserStart());
+      const response = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -42,43 +52,42 @@ function Profile() {
       const data = await response.json();
 
       if (!data.email) {
-        console.log(data);
-        //dispatch(signInFailure(data.message));
+        dispatch(updateUserFailure(data));
         return;
       }
-
-      dispatch(signInSuccess(data));
-      navigate("/");
+      setUpdateSuccess(true);
+      dispatch(updateUserSuccess(data));
     } catch (error) {
-      //dispatch(signInFailure(error));
+      dispatch(updateUserFailure(data.mesage));
     }
   };
 
-  const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    setImage(image);
-  };
-
   React.useEffect(() => {
-    handleImageUpload();
+    if (image) handleImageUpload();
   }, [image]);
 
   const handleImageUpload = async () => {
+    setImageError(false);
     const storage = getStorage(app);
-    const fileName = image?.name + new Date().getTime();
+    const fileName = new Date().getTime() + image.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, image);
-
-    uploadTask.on("state_changed", (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      setImageUploadProgress(Math.round(progress));
-    });
-    (error) => setImageError(true);
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        setFormData((prev) => ({ ...prev, profileImage: downloadURL }));
-      });
-    };
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImageUploadProgress(Math.round(progress));
+      },
+      (error) => {
+        if (error) setImageError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          setFormData({ ...formData, profileImage: downloadURL })
+        );
+      }
+    );
   };
 
   return (
@@ -140,7 +149,7 @@ function Profile() {
           className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[35%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
           disabled={currentUser.loading}
         >
-          {currentUser.loading ? "Updating..." : "Update"}
+          {loading ? "Updating..." : "Update"}
         </button>
 
         <div className="flex justify-between w-full sm:w-[75%] lg:w-[35%]">
@@ -161,10 +170,13 @@ function Profile() {
             </Link>
           </p>
         </div>
-        {currentUser.error && (
+        {error && (
           <p className="text-red-500">
             Something went wrong. Please try again.
           </p>
+        )}
+        {updateSuccess && (
+          <p className="text-green-500">Profile Updated Successfully.</p>
         )}
       </form>
     </div>

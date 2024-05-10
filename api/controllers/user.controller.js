@@ -1,10 +1,10 @@
 import User from "../models/users.model.js";
 import bcryptjs from "bcryptjs";
 import errorHandler from "../utils/errorHandler.js";
-import jwt from "jsonwebtoken";
+
 
 export default async function updateUserController(req, res, next) {
-  console.log(req.params);
+  console.log(req.params.id, req.user.id);
   if (req.user.id !== req.params.id) {
     return res.status(401).json("You can only update your account");
   }
@@ -27,7 +27,6 @@ export default async function updateUserController(req, res, next) {
       { new: true }
     );
     const { password, ...rest } = updatedUser._doc;
-    console.log({ updatedUser });
 
     return res.status(200).json(rest);
   } catch (err) {
