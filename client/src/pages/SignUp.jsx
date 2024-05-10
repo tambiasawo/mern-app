@@ -50,6 +50,7 @@ function SignUp() {
           placeholder="Username"
           className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%] focus:outline-dashed"
           onChange={handleChange}
+          required
         />
         <input
           type="email"
@@ -57,6 +58,7 @@ function SignUp() {
           placeholder="Email Address"
           className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
           onChange={handleChange}
+          required
         />
         <input
           type="password"
@@ -64,6 +66,7 @@ function SignUp() {
           placeholder="Password"
           className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
           onChange={handleChange}
+          required
         />
         <button
           className="bg-slate-700 rounded-lg p-3 w-full sm:w-[75%] lg:w-[35%] disabled:opacity-70 hover:opacity-95 uppercase text-white"
