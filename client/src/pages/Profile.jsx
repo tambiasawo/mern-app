@@ -53,7 +53,7 @@ function Profile() {
     e.preventDefault();
 
     if (Object.keys(formData).length === 0) {
-      return; //seta state
+      return; //or set a state
     }
     try {
       dispatch(updateUserStart());
