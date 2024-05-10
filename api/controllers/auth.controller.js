@@ -24,12 +24,18 @@ export const SignInController = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return next(errorHandler);
+      return res.status(404).json({
+        message: "Wrong Credentials. Please try again",
+        success: false,
+      });
     }
     const checkValidity = enteredPassword.localeCompare(user.password);
 
     if (checkValidity !== 0) {
-      return next(errorHandler(404, "Credentials Wrong. Pls Try Again"));
+      return res.status(404).json({
+        message: "Wrong Credentials. Please try again",
+        success: false,
+      });
     }
     const { password, ...rest } = user._doc;
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -39,7 +45,7 @@ export const SignInController = async (req, res, next) => {
       .status(200)
       .json(rest);
   } catch (err) {
-    next(err);
+    next(errorHandler(err));
   }
 };
 

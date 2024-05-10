@@ -4,7 +4,9 @@ import errorHandler from "../utils/errorHandler.js";
 
 export const updateUserController = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
-    return res.status(401).json("You can only update your account");
+    return res
+      .status(401)
+      .json({ success: false, message: "You can only update your account" });
   }
 
   try {
@@ -28,13 +30,11 @@ export const updateUserController = async (req, res, next) => {
 
     return res.status(200).json(rest);
   } catch (err) {
-    console.log(err);
+    next(errorHandler);
   }
 };
 
 export const deleteUserController = async (req, res, next) => {
-  console.log(req.params.id, req.user.id);
-
   if (req.params.id !== req.user.id) {
     return res.status("401").json("You are forbidden to delete this account");
   }

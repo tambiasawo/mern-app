@@ -10,7 +10,7 @@ import {
 
 function SignIn() {
   const [formData, setFormData] = React.useState({});
-
+  const [isError, setIsError] = React.useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -23,6 +23,7 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsError(false);
     try {
       dispatch(signInStart());
       const response = await fetch("/api/auth/signin", {
@@ -32,11 +33,11 @@ function SignIn() {
       });
       const data = await response.json();
 
-      if (!data.email) {
-        dispatch(signInFailure(data.message));
+      if (data.success === false) {
+        setIsError(true);
+        dispatch(signInFailure(data));
         return;
       }
-
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
@@ -75,7 +76,7 @@ function SignIn() {
         <OAuthBtn />
         <div>
           <p>
-            Don't have an account?{" "}
+            Don't have an account?
             <Link
               to="/sign-up"
               className="underline hover:text-blue-500 cursor-pointer"
@@ -84,9 +85,10 @@ function SignIn() {
             </Link>
           </p>
         </div>
-        {user.error && (
+        {isError && (
           <p className="text-red-500">
-            Something went wrong. Please try again.
+            {user.errorData.message ||
+              "Something went wrong. Please try again."}
           </p>
         )}
       </form>
