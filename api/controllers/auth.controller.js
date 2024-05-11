@@ -6,17 +6,17 @@ import jwt from "jsonwebtoken";
 export const SignUpController = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-
   const user = new User({ username, email, password: hashedPassword });
+
   try {
-    const user = await User.findOne({ email });
-    if (user) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(404).json({
         message: "Sorry, we were not able to sign you up",
         success: false,
       });
     }
-    await user.save();
+    await user.save({ username, email, password: hashedPassword });
     res
       .status(201)
       .json({ message: "New User created " + user, success: true });
@@ -26,7 +26,7 @@ export const SignUpController = async (req, res, next) => {
 };
 
 export const SignInController = async (req, res, next) => {
-  const { email, password: enteredPassword } = req.body;
+  const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
 
@@ -36,15 +36,15 @@ export const SignInController = async (req, res, next) => {
         success: false,
       });
     }
-    const checkValidity = enteredPassword.localeCompare(user.password);
+    const checkValidity = bcryptjs.compareSync(password, user.password);
 
-    if (checkValidity !== 0) {
+    if (!checkValidity) {
       return res.status(404).json({
         message: "Wrong Credentials. Please try again",
         success: false,
       });
     }
-    const { password, ...rest } = user._doc;
+    const { password: hashedPassword, ...rest } = user._doc;
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     const expiryDate = new Date(Date.now() + 3600000);
     return res
