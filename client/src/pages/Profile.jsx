@@ -42,7 +42,7 @@ function Profile() {
 
   const handleSignOut = async () => {
     try {
-      await fetch("/api/auth/signout");
+      await fetch("http://localhost:3000/api/auth/signout");
       dispatch(signOut());
     } catch (e) {
       console.log(e);
@@ -57,11 +57,14 @@ function Profile() {
     }
     try {
       dispatch(updateUserStart());
-      const response = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await response.json();
 
       if (!data.email) {
@@ -106,9 +109,12 @@ function Profile() {
   const handleDelete = async () => {
     dispatch(deleteUserStart());
     try {
-      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:3000/api/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await response.json();
       console.log(data);
       navigate("/");
