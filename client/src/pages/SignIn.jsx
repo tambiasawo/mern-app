@@ -76,7 +76,7 @@ function SignIn() {
         <OAuthBtn />
         <div>
           <p>
-            Don't have an account?
+            Don't have an account?{" "}
             <Link
               to="/sign-up"
               className="underline hover:text-blue-500 cursor-pointer"
