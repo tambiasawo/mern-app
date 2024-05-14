@@ -26,9 +26,12 @@ function SignIn() {
     setIsError(false);
     try {
       dispatch(signInStart());
-      const response = await fetch("http://localhost:3000/api/auth/signin", {
+      const response = await fetch("http://localhost:3000/api/auth/signin/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
         body: JSON.stringify(formData),
       });
       const data = await response.json();
