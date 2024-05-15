@@ -9,14 +9,6 @@ import path from "path";
 
 dotenv.config({ path: "../.env" });
 
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(function () {
-    console.log("mongodb connected");
-  })
-  .catch((e) => {
-    console.log("an error occured", e.message);
-  });
 const app = express();
 const __dirname = path.resolve();
 
@@ -25,6 +17,19 @@ app.use(express.static(path.join(__dirname, "/client/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
+
+mongoose
+  .connect(process.env.MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(function () {
+    console.log("mongodb connected");
+  })
+  .catch((e) => {
+    console.log("an error occured", e.message);
+  });
+mongoose.set("useFindAndModify", false);
 
 app.use(express.json());
 app.use(cookieParser());
