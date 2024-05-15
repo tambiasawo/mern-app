@@ -19,7 +19,11 @@ mongoose
   });
 const app = express();
 const __dirname = path.resolve();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://mern-fullstack-app-rust.vercel.app/sign-in",
+  })
+);
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
 app.get("*", (req, res) => {
