@@ -28,7 +28,7 @@ export const SignUpController = async (req, res, next) => {
 export const SignInController = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.find({ email });
 
     if (!user) {
       return res.status(404).json({
