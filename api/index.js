@@ -1,14 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import errorHandler from "./utils/errorHandler.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 
-dotenv.config();
-
+console.log("db connection", process.env.MONGODB_URL);
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {
