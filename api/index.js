@@ -29,7 +29,6 @@ mongoose
   .catch((e) => {
     console.log("an error occured", e.message);
   });
-mongoose.set("useFindAndModify", false);
 
 app.use(express.json());
 app.use(cookieParser());
