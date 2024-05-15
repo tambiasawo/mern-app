@@ -7,7 +7,8 @@ import errorHandler from "./utils/errorHandler.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 
-dotenv.config();
+dotenv.config({ path: "../.env" });
+
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {
