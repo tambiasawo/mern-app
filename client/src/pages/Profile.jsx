@@ -64,6 +64,7 @@ function Profile() {
         `http://localhost:3000/api/user/update/${currentUser._id}`,
         {
           method: "POST",
+          credentials: "include", // includes the token in the header
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         }
