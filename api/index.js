@@ -10,7 +10,6 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 
-console.log("db connection", process.env.MONGODB_URL);
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {
