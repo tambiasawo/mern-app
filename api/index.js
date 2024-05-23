@@ -15,7 +15,7 @@ const BASE_URL =
     ? process.env.DEV_URL
     : process.env.PROD_URL;
 
-console.log(BASE_URL);
+
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {

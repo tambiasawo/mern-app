@@ -34,7 +34,7 @@ function SignIn() {
     setIsError(false);
     try {
       dispatch(signInStart());
-      const response = await fetch(`${BASE_URL}/api/auth/signin`, {
+      const response = await fetch(`/api/auth/signin`, {
         method: "POST",
         credentials: "include",
         headers: {
