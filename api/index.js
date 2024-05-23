@@ -27,7 +27,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: BASE_URL,
+   // origin: BASE_URL,
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
