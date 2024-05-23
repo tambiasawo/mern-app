@@ -10,6 +10,12 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.DEV_URL
+    : process.env.PROD_URL;
+
+console.log(BASE_URL);
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {
@@ -22,7 +28,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: true,
+    origin: BASE_URL,
     credentials: true,
   })
 );
