@@ -9,6 +9,11 @@ import {
 } from "../redux/user/userSlice";
 
 function SignIn() {
+  const BASE_URL =
+    import.meta.env.VITE_NODE_ENV === "development"
+      ? import.meta.env.VITE_DEV_URL
+      : import.meta.env.VITE_PROD_URL;
+  console.log(import.meta.env.VITE_NODE_ENV);
   const [formData, setFormData] = React.useState({});
   const [isError, setIsError] = React.useState(false);
   const navigate = useNavigate();
@@ -26,7 +31,7 @@ function SignIn() {
     setIsError(false);
     try {
       dispatch(signInStart());
-      const response = await fetch("http://localhost:3000/api/auth/signin", {
+      const response = await fetch(`${BASE_URL}/api/auth/signin`, {
         method: "POST",
         credentials: "include",
         headers: {
