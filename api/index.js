@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.route.js";
 import errorHandler from "./utils/errorHandler.js";
 import cookieParser from "cookie-parser";
 import path from "path";
+import cors from "cors";
 
 console.log("db connection", process.env.MONGODB_URL);
 mongoose
@@ -19,8 +20,9 @@ mongoose
     console.log("an error occured", e.message);
   });
 const app = express();
-const __dirname = path.resolve();
+app.use(cors());
 
+const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
 app.get("*", (req, res) => {
