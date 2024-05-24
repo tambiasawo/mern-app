@@ -10,11 +10,6 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 
-const BASE_URL =
-  process.env.NODE_ENV === "development"
-    ? process.env.DEV_URL
-    : process.env.PROD_URL;
-
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(function () {
@@ -22,12 +17,13 @@ mongoose
   })
   .catch((e) => {
     console.log("an error occured", e.message);
+    process.exit(1);
   });
 const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-   // origin: BASE_URL,
+    origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   })
