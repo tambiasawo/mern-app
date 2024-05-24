@@ -19,11 +19,6 @@ import {
 } from "firebase/storage";
 
 function Profile() {
-  const BASE_URL =
-    import.meta.env.VITE_NODE_ENV === "development"
-      ? import.meta.env.VITE_DEV_URL
-      : import.meta.env.VITE_PROD_URL;
-
   const [formData, setFormData] = React.useState({});
   const [updateSuccess, setUpdateSuccess] = React.useState(false);
   const fileRef = React.useRef(null);
@@ -47,7 +42,7 @@ function Profile() {
 
   const handleSignOut = async () => {
     try {
-      await fetch(`${BASE_URL}/api/auth/signout`, {
+      await fetch(`/api/auth/signout`, {
         method: "GET",
         credentials: "include",
       });
@@ -65,15 +60,12 @@ function Profile() {
     }
     try {
       dispatch(updateUserStart());
-      const response = await fetch(
-        `${BASE_URL}/api/user/update/${currentUser._id}`,
-        {
-          method: "POST",
-          credentials: "include", // includes the token in the header
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        credentials: "include", // includes the token in the header
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await response.json();
 
       if (!data.email) {
@@ -118,12 +110,9 @@ function Profile() {
   const handleDelete = async () => {
     dispatch(deleteUserStart());
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/user/delete/${currentUser._id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
       const data = await response.json();
       console.log(data);
       navigate("/");

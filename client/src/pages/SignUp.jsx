@@ -3,10 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import OAuthBtn from "../components/OAuthBtn";
 
 function SignUp() {
-  const BASE_URL =
-    import.meta.env.VITE_NODE_ENV === "development"
-      ? import.meta.env.VITE_DEV_URL
-      : import.meta.env.VITE_PROD_URL;
   const [formData, setFormData] = React.useState({});
   const [isLoading, setIsLoading] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
@@ -24,7 +20,7 @@ function SignUp() {
     try {
       setIsLoading(true);
       setIsError(false);
-      const response = await fetch(`${BASE_URL}/api/auth/signup`, {
+      const response = await fetch(`/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
