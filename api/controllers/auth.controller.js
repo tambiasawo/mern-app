@@ -100,7 +100,11 @@ export const GoogleAuthController = async (req, res, next) => {
 };
 
 export const SignOutController = async (req, res) => {
-  const token = req.cookies.access_token;
-  if (!token) return;
-  res.clearCookie("access_token").status(200).json("User signed out");
+  try {
+    const token = req.cookies.access_token;
+    if (!token) return res.status(403).json({ message: "Invalid Token" });
+    res.clearCookie("access_token").status(200).json("User signed out");
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong" + e.message });
+  }
 };
