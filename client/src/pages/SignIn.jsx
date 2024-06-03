@@ -58,6 +58,7 @@ function SignIn() {
           type="email"
           id="email"
           required
+          defaultValue={"user17@yahoo.com"}
           placeholder="Email Address"
           className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
           onChange={handleChange}
@@ -65,6 +66,7 @@ function SignIn() {
         <input
           type="password"
           id="password"
+          defaultValue={"user17"}
           required
           placeholder="Password"
           className="bg-slate-50 rounded-lg py-2 px-2 outline-none w-full sm:w-[75%] lg:w-[35%]"
