@@ -27,7 +27,7 @@ export const SignUpController = async (req, res, next) => {
 
 export const SignInController = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("method: " + req.method);
+
   try {
     const user = await User.findOne({ email });
 
